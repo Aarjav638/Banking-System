@@ -48,3 +48,12 @@ model Payee {
   userId        String @unique
   user          User   @relation(fields: [userId], references: [id])
 }
+
+model ContactUs {
+  id        String   @id @default(cuid()) @map("_id")
+  name      String
+  email     String
+  message   String
+  phone     String
+  createdAt DateTime @default(now())
+}
