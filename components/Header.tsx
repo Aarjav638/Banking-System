@@ -43,8 +43,8 @@ const Header: React.FC = () => {
               </Link>
             </li>
             <li>
-              <Link href="/contact" referrerPolicy="no-referrer">
-                Contact
+              <Link href="/contactus" referrerPolicy="no-referrer">
+                Contact Us
               </Link>
             </li>
           </ul>
