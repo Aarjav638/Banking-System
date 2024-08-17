@@ -31,7 +31,7 @@ export default function Dashboard() {
       </div>
       <div className="mt-10 h-screen bg-black flex flex-col overflow-auto p-2">
         <div className="justify-center h-1/2 bg-yellow-50  md:justify-between flex flex-col md:flex-row p-4 ">
-          <UserProfileCard />
+          <UserProfileCard type={type ? type : ""} token={token ? token : ""} />
           <CustomCard />
         </div>
         <div className="h-1/2 w-full items-center flex flex-col gap-2 my-4 pb-4">
