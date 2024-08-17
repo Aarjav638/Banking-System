@@ -5,8 +5,8 @@ export interface user{
     phone:string;
 }
 export interface Transaction {
-    id: string;
+    id: string|null;
     amount: number;
     type: string;
-    date: string;
+    mode: string;
   }

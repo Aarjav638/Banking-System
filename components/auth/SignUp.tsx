@@ -25,8 +25,10 @@ const SignUpModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
       phone: phoneRef.current!.value,
     };
     try {
+      setLoading(true);
       const response = await axios.post("/api/auth/register", user);
-      if (response.status === 200) {
+      if (response.status === 201) {
+        alert("Sign up successful");
         window.location.reload();
       }
     } catch (error) {

@@ -20,7 +20,7 @@ const SignInModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
       email: emailRef.current!.value,
       password: passwordRef.current!.value,
     };
-
+    setLoading(true);
     try {
       setLoading(true);
       const response = await axios.post("/api/auth/login", user);
