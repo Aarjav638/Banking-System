@@ -7,19 +7,24 @@ const SidePanel = () => {
         <h2 className="text-teal-400 text-2xl font-semibold underline">
           Our Services
         </h2>
-        <ul className="flex flex-col gap-y-2 mt-4 text-lg text-white">
+        <ul className="flex flex-col gap-y-4 mt-4 text-lg text-white">
           <li>
             <Link href="/dashboard" referrerPolicy="no-referrer">
               View DashBoard
             </Link>
           </li>
           <li>
-            <Link href="/fundtransfer" referrerPolicy="no-referrer">
+            <Link href="/dashboard/openaccount" referrerPolicy="no-referrer">
+              Open Account
+            </Link>
+          </li>
+          <li>
+            <Link href="/dashboard/fundtransfer" referrerPolicy="no-referrer">
               Funds Transfer
             </Link>
           </li>
           <li>
-            <Link href="/tnxhistory" referrerPolicy="no-referrer">
+            <Link href="/dashboard/tnxhistory" referrerPolicy="no-referrer">
               View Bank Statement
             </Link>
           </li>
