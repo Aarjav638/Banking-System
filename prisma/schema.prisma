@@ -20,43 +20,36 @@ model User {
 }
 
 model Account {
-  id            String        @id @default(cuid()) @map("_id")
-  accountNumber String        @unique
-  balance       Float         @default(0)
+  id            String         @id @default(cuid()) @map("_id")
+  accountNumber String         @unique
+  balance       Float          @default(0)
   userId        String
-  user          User          @relation(fields: [userId], references: [id])
-  transactions  Transaction[]
-  Payee         Payee[]
+  user          User           @relation(fields: [userId], references: [id])
+  transactions  Transactions[]
   type          String
   name          String
-  isMinor       Boolean       @default(false)
+  isMinor       Boolean        @default(false)
   uid           String
   fatherName    String
   address       String
   dob           DateTime
   phone         String
   pan           String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
-model Payee {
-  id          String        @id @default(cuid()) @map("_id")
-  name        String
-  accountId   String
-  account     Account       @relation(fields: [accountId], references: [id])
-  Transaction Transaction[]
-}
-
-model Transaction {
+model Transactions {
   id              String   @id @default(cuid()) @map("_id")
   accountId       String
-  account         Account  @relation(fields: [accountId], references: [id])
-  payeeId         String?
-  payee           Payee?   @relation(fields: [payeeId], references: [id])
+  account         Account  @relation(fields: [accountId], references: [accountNumber])
+  sender          String
+  reciever        String
   amount          Float
   transactionType String
   mode            String
+  recieverAccount String
+  senderAccount   String
   createdAt       DateTime @default(now())
 }
 

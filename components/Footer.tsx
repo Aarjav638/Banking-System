@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
         © 2024 Random Post Generator. All rights reserved.
       </p>
       <div className="min-w-[50%] justify-center items-center">
-        <ul className=" flex flex-row items-center sm:justify-end w-full justify-center gap-x-4 text-white">
+        <ul className=" flex flex-row items-center w-full justify-center gap-x-4 text-white">
           <li>
             <Link href="/" referrerPolicy="no-referrer">
               Home

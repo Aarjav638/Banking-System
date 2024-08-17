@@ -16,14 +16,11 @@ const Header: React.FC = () => {
   }, []);
   return (
     <>
-      <header className="flex justify-between flex-row bg-teal-500 min-w-full text-white py-4 px-4 md:px-8 items-center">
+      <header className="flex justify-between gap-2 flex-row bg-teal-500 min-w-full text-white py-4 px-4 md:px-8 items-center">
         <Link href="/">
-          {" "}
-          <h1 className="text-xl md:text-2xl font-semibold mr-6 md:ml-6 text-center">
-            Banking System
-          </h1>
+          <h1 className="text-xl font-semibold">Banking System</h1>
         </Link>
-        <div className="w-[25%] hidden md:flex">
+        <div className="w-4/5 lg:w-4/6 justify-center items-center hidden md:flex">
           <ul className="flex-row flex gap-x-6 ">
             <li>
               <Link href="/" referrerPolicy="no-referrer">
@@ -31,11 +28,21 @@ const Header: React.FC = () => {
               </Link>
             </li>
             {token && (
-              <li>
-                <Link href="/dashboard" referrerPolicy="no-referrer">
-                  DashBoard
-                </Link>
-              </li>
+              <>
+                <li>
+                  <Link href="/dashboard" referrerPolicy="no-referrer">
+                    DashBoard
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/dashboard/openaccount"
+                    referrerPolicy="no-referrer"
+                  >
+                    Open Account
+                  </Link>
+                </li>
+              </>
             )}
             <li>
               <Link href="/aboutus" referrerPolicy="no-referrer">
@@ -49,7 +56,7 @@ const Header: React.FC = () => {
             </li>
           </ul>
         </div>
-        <div className="w-[25%] hidden md:flex justify-end">
+        <div className="w-[10%] lg:w-[4%] hidden md:flex justify-end">
           {token ? (
             <li
               className="cursor-pointer list-none"
@@ -88,11 +95,20 @@ const Header: React.FC = () => {
                 Home
               </Link>
             </li>
-            <li className="flex md:hidden">
-              <Link href="/dashboard" referrerPolicy="no-referrer">
-                Dashboard
-              </Link>
-            </li>
+            {token && (
+              <>
+                <li className="flex md:hidden">
+                  <Link href="/dashboard" referrerPolicy="no-referrer">
+                    DashBoard
+                  </Link>
+                </li>
+                <li className="flex md:hidden">
+                  <Link href="/openaccount" referrerPolicy="no-referrer">
+                    Open Account
+                  </Link>
+                </li>
+              </>
+            )}
 
             <li className="flex md:hidden">
               <Link href="/aboutus" referrerPolicy="no-referrer">

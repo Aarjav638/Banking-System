@@ -32,7 +32,7 @@ export const POST = async (req: NextRequest) => {
 
     const accountNumber = generateAccountNumber();
 
-    if (!name || !phone || !pan || !uid || !father_name || !address || !dob|| !type|| !amount) {
+    if (!name || !phone ||  !uid || !father_name || !address || !dob|| !type|| !amount) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
@@ -40,26 +40,28 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ error: 'Phone number should be 10 digits' }, { status: 400 });
     }
 
-    if (pan.length !== 0 && pan.length !== 10) {
+    if (pan && (pan.length !== 0 && pan.length !== 10)) {
       return NextResponse.json({ error: 'PAN number should be 10 digits' }, { status: 400 });
     }
 
     if (type !== 'savings' && type !== 'current') {
       return NextResponse.json({ error: 'Invalid account type' }, { status: 400 });
     }
+    if(type==='current' && pan.length === 0){
+      return NextResponse.json({ error: 'PAN number is required for current account' }, { status: 400 });
+    }
 
     const existingAccount = await prisma.account.findFirst({
       where: {
-        OR: [
-          { uid },
-        ],
+        uid: uid,
+        type: type,
       },
     });
 
     if (existingAccount) {
-      return NextResponse.json({ error: 'Account with the same PAN or UID already exists' }, { status: 400 });
-
+      return NextResponse.json({ error: 'Account with the same Type or UID already exists' }, { status: 400 });
     }
+    
 
     const formattedDob = new Date(dob).toISOString();
 
@@ -81,7 +83,7 @@ export const POST = async (req: NextRequest) => {
       },
     });
 
-    return NextResponse.json({ message: 'Account created successfully', accountNumber,account }, { status: 200 });
+    return NextResponse.json({ message: 'Account created successfully', accountNumber,account }, { status: 201 });
   } catch (error) {
     console.error('Error creating account:', error);
     return NextResponse.json({ error: 'An error occurred' }, { status: 500 });
