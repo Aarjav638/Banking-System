@@ -33,7 +33,9 @@ export default function RootLayout({
       setupAxiosInterceptors(token, () => {
         alert("Your session has expired. Please log in again.");
         localStorage.clear();
+
         router.push("/"); // Redirect to login page on token expiration
+
       });
     }
   }, [router, token]);
