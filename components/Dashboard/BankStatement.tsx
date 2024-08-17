@@ -8,7 +8,7 @@ interface FundTransferSavingsProps {
   type: string;
 }
 
-const MiniStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
+const BankStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [account, setAccount] = useState<any>(null);
@@ -16,6 +16,10 @@ const MiniStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
   const [currentaccountNumber, setCurrentAccountNumber] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [statement, setStatement] = useState<any>(null);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const transactionsPerPage = 10;
 
   useEffect(() => {
     if (token) {
@@ -110,13 +114,31 @@ const MiniStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
     }
   };
 
+  // Pagination logic
+  const indexOfLastTransaction = currentPage * transactionsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+  const currentTransactions = statement?.slice(
+    indexOfFirstTransaction,
+    indexOfLastTransaction
+  );
+
+  const totalPages = Math.ceil((statement?.length || 0) / transactionsPerPage);
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
   if (statement) {
     return (
       <div className="flex flex-col w-full h-full p-4">
         <h2 className="text-lg sm:text-xl font-bold text-center text-slate-700">
-          Mini Statement
+          Bank Statement
         </h2>
-        <p className="text-teal-300 text-center">Your Past 10 Transactions</p>
+        <p className="text-teal-700 text-center">Your Transactions</p>
         <div className="flex flex-col justify-center items-center bg-blue-400 w-full">
           <table className="table-fixed divide-y w-full divide-gray-200 dark:divide-gray-700 ">
             <thead>
@@ -136,34 +158,52 @@ const MiniStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
               </tr>
             </thead>
             <tbody>
-              {statement
-                ?.slice(0, 10)
-                .map((transaction: any, index: number) => (
-                  <tr
-                    key={index}
-                    className="odd:bg-neutral-900 even:bg-neutral-700 text-center items-center justify-center text-gray-200"
-                  >
-                    <td className="text-md sm:text-lg font-bold overflow-x-auto">
-                      {isSmallScreen
-                        ? new Date(transaction.createdAt)
-                            .toLocaleDateString()
-                            .slice(0, 5)
-                        : new Date(transaction.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="text-md sm:text-lg font-bold">
-                      {transaction.amount}
-                    </td>
-                    <td className="text-md sm:text-lg font-bold">
-                      {transaction.transactionType.charAt(0).toUpperCase() +
-                        transaction.transactionType.slice(1)}
-                    </td>
-                    <td className="text-md sm:text-lg font-bold hidden sm:flex">
-                      {transaction.mode}
-                    </td>
-                  </tr>
-                ))}
+              {currentTransactions?.map((transaction: any, index: number) => (
+                <tr
+                  key={index}
+                  className="odd:bg-neutral-900 even:bg-neutral-700 text-center items-center justify-center text-gray-200"
+                >
+                  <td className="text-md sm:text-lg font-bold overflow-x-auto">
+                    {isSmallScreen
+                      ? new Date(transaction.createdAt)
+                          .toLocaleDateString()
+                          .slice(0, 5)
+                      : new Date(transaction.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="text-md sm:text-lg font-bold">
+                    {transaction.amount}
+                  </td>
+                  <td className="text-md sm:text-lg font-bold">
+                    {transaction.transactionType.charAt(0).toUpperCase() +
+                      transaction.transactionType.slice(1)}
+                  </td>
+                  <td className="text-md sm:text-lg font-bold hidden sm:flex">
+                    {transaction.mode}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
+        </div>
+        {/* Pagination Controls */}
+        <div className="flex justify-between items-center mt-4">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="text-gray-700">
+            {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold rounded disabled:opacity-50"
+          >
+            Next
+          </button>
         </div>
       </div>
     );
@@ -176,4 +216,4 @@ const MiniStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
   }
 };
 
-export default MiniStatement;
+export default BankStatement;
