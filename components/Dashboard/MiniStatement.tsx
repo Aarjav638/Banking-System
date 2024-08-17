@@ -1,7 +1,67 @@
+"use client";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { decryptAccountNumberDeterministic } from "@/helpers/Account/accountGenerate";
 
-const MiniStatement = () => {
+interface FundTransferSavingsProps {
+  token: string;
+  type: string;
+}
+
+const MiniStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [account, setAccount] = useState<any>(null);
+  const [savingsaccountNumber, setSavingsAccountNumber] = useState<string>("");
+  const [currentaccountNumber, setCurrentAccountNumber] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [statement, setStatement] = useState<any>(null);
+
+  useEffect(() => {
+    if (token) {
+      const fetchAccount = async () => {
+        try {
+          const response = await axios.get("/api/account/getdetails", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setAccount(response.data);
+        } catch (err) {
+          console.error("Failed to fetch account details:", err);
+          setError("Failed to fetch account details. Please try again.");
+        }
+      };
+
+      fetchAccount();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (account) {
+      try {
+        const decryptedSavingAccountNumber = decryptAccountNumberDeterministic(
+          account[0].accountNumber
+        );
+        const decryptedCurrentAccountNumber = decryptAccountNumberDeterministic(
+          account[1].accountNumber
+        );
+        setCurrentAccountNumber(decryptedCurrentAccountNumber);
+
+        setSavingsAccountNumber(decryptedSavingAccountNumber);
+      } catch (error) {
+        console.error("Failed to decrypt account number:", error);
+        setError("Failed to decrypt account number.");
+      }
+    }
+  }, [account]);
+
+  useEffect(() => {
+    if (type) {
+      getStatement();
+    }
+  }, [type]);
+
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth <= 350);
@@ -52,7 +112,7 @@ const MiniStatement = () => {
 
   if (statement) {
     return (
-      <div className="flex flex-col w-full h-full ">
+      <div className="flex flex-col w-full h-full p-4">
         <h2 className="text-lg sm:text-xl font-bold text-center text-slate-700">
           Mini Statement
         </h2>
@@ -109,8 +169,8 @@ const MiniStatement = () => {
     );
   } else if (loading) {
     return (
-      <div className="flex justify-center items-center flex-col w-full h-full">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-500"></div>
+      <div className="flex justify-center items-center w-full h-full">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-900"></div>
       </div>
     );
   }
