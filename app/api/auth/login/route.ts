@@ -40,7 +40,7 @@ export const POST = async (req:NextRequest) => {
         { _id: user.id },
         jwtSecret,
         {
-          expiresIn: "7d",
+          expiresIn: "1hr",
         }
       );
 

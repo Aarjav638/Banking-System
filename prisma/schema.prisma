@@ -8,45 +8,56 @@ generator client {
 }
 
 model User {
-  id           String        @id @default(cuid()) @map("_id")
-  email        String        @unique
-  password     String
-  avatar       String?
-  name         String
-  phone        String
-  accounts     Account[]
-  transactions Transaction[]
-  payees       Payee[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id        String    @id @default(cuid()) @map("_id")
+  email     String    @unique
+  password  String
+  avatar    String?
+  name      String
+  phone     String
+  accounts  Account[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Account {
   id            String        @id @default(cuid()) @map("_id")
   accountNumber String        @unique
-  balance       Float         @default(0.0)
+  balance       Float         @default(0)
   userId        String
   user          User          @relation(fields: [userId], references: [id])
   transactions  Transaction[]
-}
-
-model Transaction {
-  id        String   @id @default(cuid()) @map("_id")
-  amount    Float
-  type      String
-  date      DateTime @default(now())
-  accountId String
-  account   Account  @relation(fields: [accountId], references: [id])
-  User      User?    @relation(fields: [userId], references: [id])
-  userId    String?
+  Payee         Payee[]
+  type          String
+  name          String
+  isMinor       Boolean       @default(false)
+  uid           String
+  fatherName    String
+  address       String
+  dob           DateTime
+  phone         String
+  pan           String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model Payee {
-  id            String @id @default(cuid()) @map("_id")
-  name          String
-  accountNumber String @unique
-  userId        String @unique
-  user          User   @relation(fields: [userId], references: [id])
+  id          String        @id @default(cuid()) @map("_id")
+  name        String
+  accountId   String
+  account     Account       @relation(fields: [accountId], references: [id])
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id              String   @id @default(cuid()) @map("_id")
+  accountId       String
+  account         Account  @relation(fields: [accountId], references: [id])
+  payeeId         String?
+  payee           Payee?   @relation(fields: [payeeId], references: [id])
+  amount          Float
+  transactionType String
+  mode            String
+  createdAt       DateTime @default(now())
 }
 
 model ContactUs {

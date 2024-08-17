@@ -19,9 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header />
-        {children}
-        <Footer />
+        <div className="flex flex-col h-screen w-screen">
+          <Header />
+          <div className=" max-w-full max-h-full overflow-auto">
+            {children}
+            <Footer />
+          </div>
+        </div>
       </body>
     </html>
   );
