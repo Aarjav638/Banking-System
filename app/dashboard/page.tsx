@@ -48,20 +48,34 @@ export default function Dashboard() {
     <div className="flex flex-col w-full h-full bg-slate-200 p-4 ">
       <Fab />
       <div className="flex flex-col w-full justify-center items-center">
-        <div className="flex items-center justify-center w-full">
-          <h1 className="my-4 text-2xl sm:text-4xl ">Dashboard</h1>
-        </div>
-        <p className="text-teal-300 text-md font-bold flex flex-col mb-4 bg-slate-500 w-4/5 md:w-3/4 lg:w-1/2 rounded-lg text-center p-4">
-          Welcome to your dashboard. Here you can see all your Details.
-        </p>
+        <h1 className="text-2xl sm:text-4xl text-center">Dashboard</h1>
       </div>
-      <div className="mt-10 h-screen bg-black flex flex-col overflow-auto p-2">
-        <div className="justify-center h-1/2 bg-yellow-50  md:justify-between flex flex-col md:flex-row p-4 ">
-          <UserProfileCard />
+      <div className="mt-4 h-screen bg-black flex flex-col overflow-auto p-2">
+        <div className="justify-center h-3/4 md:h-1/2   md:justify-between flex flex-col md:flex-row p-4 ">
+          <UserProfileCard type={type ? type : ""} token={token ? token : ""} />
           <CustomCard />
         </div>
-        <div className="h-1/2 my-2 flex flex-col mb-10">
-          <MiniStatement />
+        <div className="w-full items-center flex flex-col gap-2 my-4 pb-4">
+          <form className="flex h-1/5 w-full justify-center items-center flex-col sm:flex-row gap-2 ">
+            <label
+              htmlFor="accountType"
+              className="mr-4 sm:text-center text-white"
+            >
+              Select Account Type:{" "}
+            </label>
+            <select
+              className=" p-2 rounded-lg "
+              onChange={(e) => setType(e.target.value)}
+              value={type ? type : ""}
+            >
+              <option value="">Select Account Type</option>
+              <option value="savings">Savings</option>
+              <option value="current">Current</option>
+            </select>
+          </form>
+          <div className="mb-6 h-1/2 w-full flex flex-col">
+            <MiniStatement token={token ? token : ""} type={type ? type : ""} />
+          </div>
         </div>
       </div>
     </div>

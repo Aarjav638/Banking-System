@@ -16,6 +16,30 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You need to login first");
+      router.push("/");
+      return;
+    }
+    setToken(token);
+  }, [router]);
+
+  useEffect(() => {
+    if (token) {
+      // Set up the Axios interceptor
+      setupAxiosInterceptors(token, () => {
+        alert("Your session has expired. Please log in again.");
+        localStorage.clear();
+        router.push("/");
+      });
+    }
+  }, [router, token]);
+
   return (
     <html lang="en">
       <body className={inter.className}>
