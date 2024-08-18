@@ -21,16 +21,10 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col w-full h-full bg-slate-200 p-4 ">
-      <div className="flex flex-col w-full justify-center items-center">
-        <div className="flex items-center justify-center w-full">
-          <h1 className="my-4 text-2xl sm:text-4xl ">Dashboard</h1>
-        </div>
-        <p className="text-teal-300 text-md font-bold flex flex-col mb-4 bg-slate-500 w-4/5 md:w-3/4 lg:w-1/2 rounded-lg text-center p-4">
-          Welcome to your dashboard. Here you can see all your Details.
-        </p>
-      </div>
+      <h1 className="my-4 text-2xl sm:text-4xl text-center">Dashboard</h1>
+
       <div className="mt-10 h-screen bg-black flex flex-col overflow-auto p-2">
-        <div className="justify-center h-1/2 bg-yellow-50  md:justify-between flex flex-col md:flex-row p-4 ">
+        <div className="justify-center h-1/2 md:justify-between flex flex-col md:flex-row p-4 ">
           <UserProfileCard type={type ? type : ""} token={token ? token : ""} />
           <CustomCard />
         </div>

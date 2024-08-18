@@ -15,6 +15,7 @@ const Page = () => {
   const [error, setError] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -27,10 +28,10 @@ const Page = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      setLoading(true);
       if (
         !name ||
         !phone ||
-        !pan ||
         !uid ||
         !father_name ||
         !address ||
@@ -67,12 +68,17 @@ const Page = () => {
         setError(res.data.error);
       }
     } catch (err) {
-      console.log(err);
+      setLoading(false);
+      setError(
+        `Failed to create account. ${(err as any)?.response?.data?.error}`
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen w-full ">
+    <div className="h-screen w-full overflow-auto ">
       <h1 className="text-center text-2xl mt-2">Open Account</h1>
 
       <form
@@ -118,7 +124,6 @@ const Page = () => {
           name="pan"
           value={pan}
           onChange={(e) => setPan(e.target.value.toUpperCase())}
-          required
         />
 
         <label className="block text-sm font-medium mb-2" htmlFor="uid">
@@ -200,7 +205,7 @@ const Page = () => {
           type="submit"
           className="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600"
         >
-          Open Account
+          {loading ? "Opening Account..." : "Open Account"}
         </button>
         {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
