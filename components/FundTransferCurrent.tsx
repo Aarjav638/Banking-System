@@ -9,7 +9,7 @@ interface FundTransferCurrentProps {
 
 const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
   const [recipient, setRecipient] = useState("");
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState<number>();
   const [mode, setMode] = useState("IMPS");
   const [error, setError] = useState<string | null>(null);
   const [account, setAccount] = useState<any[]>([]); // Array to handle multiple accounts
@@ -149,7 +149,7 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
           <input
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => setAmount(Number(e.target.value))}
             placeholder="Amount"
             className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
             required
