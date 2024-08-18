@@ -1,4 +1,3 @@
-// components/BarChart.tsx
 import React from "react";
 import { Bar } from "react-chartjs-2";
 import {
@@ -40,6 +39,8 @@ const BarChart: React.FC<BarChartProps> = ({
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
+        innerHeight: 500,
+        outerHeight: 500,
       },
       {
         label: "Expense",
@@ -52,7 +53,7 @@ const BarChart: React.FC<BarChartProps> = ({
   };
 
   const options = {
-    indexAxis: "y" as const,
+    indexAxis: "x" as const,
     responsive: true,
     plugins: {
       legend: {
@@ -71,7 +72,8 @@ const BarChart: React.FC<BarChartProps> = ({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto mt-8 p-4 bg-white rounded-lg shadow-md">
+    <div className="w-full h-[50%] md:h-[80%] justify-between  items-center flex flex-col md:w-1/2 mx-auto mt-4 p-2 bg-white rounded-lg shadow-md">
+      Bar Chart
       <Bar data={chartData} options={options} />
     </div>
   );

@@ -5,6 +5,7 @@ import { useAccountType } from "@/context/account/typeContext";
 import BarChart from "@/components/Dashboard/AnalyticsCard";
 import { decryptAccountNumberDeterministic } from "@/helpers/Account/accountGenerate";
 import { useEffect, useState } from "react";
+import LineChart from "@/components/Dashboard/LineChart";
 export default function Dashboard() {
   const [error, setError] = useState<string | null>(null);
   const [account, setAccount] = useState<any>(null);
@@ -108,8 +109,13 @@ export default function Dashboard() {
     <div className="flex flex-col w-full h-full bg-slate-200 ">
       <h1 className="my-4 text-2xl sm:text-4xl text-center">Dashboard</h1>
 
-      <div className=" h-screen bg-black flex flex-col overflow-auto p-2 mx-1">
-        <div className="w-full  p-4 ">
+      <div className="h-screen bg-black flex flex-col overflow-auto p-2 mx-1">
+        <div className="w-full flex flex-col  md:flex-row  justify-between min-h-full p-4 gap-4">
+          <LineChart
+            monthlyIncome={monthlyIncome}
+            monthlySpent={monthlySpent}
+            months={months}
+          />
           <BarChart
             monthlyIncome={monthlyIncome}
             monthlySpent={monthlySpent}
