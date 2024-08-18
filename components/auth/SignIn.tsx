@@ -28,8 +28,13 @@ const SignInModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
       if (response.status === 200) {
         setToken(response.data.token); // Set the token using the context's setToken
         localStorage.setItem("token", response.data.token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify(response.data.userWithoutPassword)
+        );
         alert("Sign in successful");
         router.push("/dashboard");
+        window.location.reload();
       }
     } catch (error) {
       alert(`Sign in failed ${(error as any)?.response?.data?.message}`);

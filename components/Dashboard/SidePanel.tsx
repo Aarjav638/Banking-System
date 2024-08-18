@@ -21,13 +21,6 @@ const SidePanel = () => {
   };
 
   const fetchUserDetails = async () => {
-    console.log("Fetching user details...");
-    console.log("Token:", token);
-    console.log(
-      "Axios Instance Headers:",
-      axiosInstance.defaults.headers.common
-    );
-
     try {
       const response = await axiosInstance.get("account/getdetails");
       setUserDetails(response.data);
@@ -75,7 +68,7 @@ const SidePanel = () => {
   // }
 
   return (
-    <div className="hidden sm:flex w-[1/6] items-center flex-col min-h-[100vh] p-4 bg-black">
+    <div className="hidden sm:flex w-[1/6] items-center flex-col min-h-[100vh] p-4 bg-black overflow-auto">
       <div className="flex items-center justify-center flex-col">
         <h1 className="text-white text-2xl font-semibold text-center">
           User Details

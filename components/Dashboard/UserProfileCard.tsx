@@ -51,7 +51,6 @@ const UserProfileCard = ({
       }
     }
   }, [userDetails]);
-  console.log(userDetails);
   if (!userDetails) {
     return (
       <div className="flex flex-col w-full md:w-2/5 lg:w-[30%] h-full bg-slate-500 rounded-lg justify-center items-center p-4 mb-4 shadow-md shadow-gray-700 z-10 overflow-y-auto">

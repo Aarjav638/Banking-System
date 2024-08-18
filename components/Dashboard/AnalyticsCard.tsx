@@ -53,7 +53,7 @@ const BarChart: React.FC<BarChartProps> = ({
   };
 
   const options = {
-    indexAxis: "x" as const,
+    indexAxis: "y" as const,
     responsive: true,
     plugins: {
       legend: {
@@ -72,8 +72,7 @@ const BarChart: React.FC<BarChartProps> = ({
   };
 
   return (
-    <div className="w-full h-[50%] md:h-[80%] justify-between  items-center flex flex-col md:w-1/2 mx-auto mt-4 p-2 bg-white rounded-lg shadow-md">
-      Bar Chart
+    <div className="w-full h-full justify-between  items-center flex flex-col mx-auto mt-4 p-2 bg-white rounded-lg shadow-md">
       <Bar data={chartData} options={options} />
     </div>
   );
