@@ -14,7 +14,8 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
   const [error, setError] = useState<string | null>(null);
   const [account, setAccount] = useState<any[]>([]); // Array to handle multiple accounts
   const [currentAccountNumber, setCurrentAccountNumber] = useState<string>("");
-
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     if (token) {
       const fetchAccounts = async () => {
@@ -52,12 +53,8 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
   }, [account]);
   const handleSubmitFromSaving = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentAccountNumber) {
-      setError("No current account available for transfer.");
-      return;
-    }
-
     try {
+      setLoading(true);
       console.log("submitting");
       const response = await axios.post(
         "/api/transactions/transfer",
@@ -73,13 +70,23 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
           },
         }
       );
-      console.log("Transfer successful:", response.data);
+      if (response.status === 200) {
+        console.log("Transfer successful");
+        alert("Transfer successful");
+        setError(null);
+        setRecipient("");
+        setAmount(undefined);
+        router.push("/dashboard");
+      }
     } catch (error) {
+      setLoading(false);
       console.error(
         "An error occurred during the transfer:",
         (error as any)?.response?.data?.error
       );
       setError(`An error occurred. ${(error as any)?.response?.data?.error}`);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -159,7 +166,7 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
             className="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600"
             disabled={!currentAccountNumber}
           >
-            Transfer
+            {loading ? "Transferring..." : "Transfer"}
           </button>
         </>
       )}
