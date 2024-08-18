@@ -16,6 +16,7 @@
     "@types/crypto-js": "^4.2.2",
     "axios": "^1.7.4",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.4.3",
     "crypto": "^1.0.1",
     "crypto-js": "^4.2.0",
     "express-jwt": "^8.4.1",
@@ -27,6 +28,7 @@
     "nodemailer": "^6.9.14",
     "prisma": "^5.18.0",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "react-tiny-fab": "^4.0.4",
     "zod": "^3.23.8"

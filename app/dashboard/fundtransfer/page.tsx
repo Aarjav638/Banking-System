@@ -28,7 +28,7 @@ const Page = () => {
           Select Account Type:
         </label>
         <select
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
           value={accountType}
           onChange={(e) => setAccountType(e.target.value)}
         >

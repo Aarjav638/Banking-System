@@ -62,6 +62,15 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ error: 'Account with the same Type or UID already exists' }, { status: 400 });
     }
     
+    const existingAccounts = await prisma.account.findMany({
+      where: {
+        userId
+      },
+    });
+
+    if (existingAccounts.length >= 2) {
+      return NextResponse.json({ error: 'You can have only 2 accounts either savings or current' }, { status: 400 });
+    }
 
     const formattedDob = new Date(dob).toISOString();
 

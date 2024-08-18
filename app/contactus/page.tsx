@@ -43,7 +43,7 @@ const ContactUs: React.FC = () => {
                   {...register("name")}
                   type="text"
                   placeholder="Name"
-                  className="p-2 w-full  border border-gray-300 rounded-md"
+                  className="p-2 w-full  border text-black border-gray-300 rounded-md"
                   aria-invalid={errors.name ? "true" : "false"}
                 />
                 {errors.name && (
@@ -64,7 +64,7 @@ const ContactUs: React.FC = () => {
                   {...register("email")}
                   type="email"
                   placeholder="Email"
-                  className="p-2 w-full  border border-gray-300 rounded-md"
+                  className="p-2 w-full  border text-black border-gray-300 rounded-md"
                   aria-invalid={errors.email ? "true" : "false"}
                 />
                 {errors.email && (
@@ -85,7 +85,7 @@ const ContactUs: React.FC = () => {
                   {...register("phone")}
                   type="tel"
                   placeholder="Phone"
-                  className="p-2 w-full border border-gray-300 rounded-md"
+                  className="p-2 w-full border text-black border-gray-300 rounded-md"
                   aria-invalid={errors.phone ? "true" : "false"}
                   maxLength={10}
                   onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +108,7 @@ const ContactUs: React.FC = () => {
               <div className="w-full sm:w-2/3 gap-y-2 justify-center flex flex-col">
                 <textarea
                   {...register("message")}
-                  className="p-2 w-full  min-h-48 border border-gray-300 rounded-md"
+                  className="p-2 w-full  min-h-48 border text-black border-gray-300 rounded-md"
                   aria-invalid={errors.message ? "true" : "false"}
                 />
                 {errors.message && (

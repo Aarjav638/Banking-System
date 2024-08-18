@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useAxios } from "@/context/axiosContext"; // Adjust the import path
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,10 +10,12 @@ interface ModalProps {
 
 const SignInModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
   const router = useRouter();
+  const { axiosInstance, setToken } = useAxios(); // Use axios instance and setToken from the context
   const [loading, setLoading] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user = {
@@ -22,21 +24,22 @@ const SignInModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
     };
     setLoading(true);
     try {
-      setLoading(true);
-      const response = await axios.post("/api/auth/login", user);
+      const response = await axiosInstance.post("auth/login", user);
       if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(response.data));
+        setToken(response.data.token); // Set the token using the context's setToken
         localStorage.setItem("token", response.data.token);
-        window.location.reload();
+        alert("Sign in successful");
+        router.push("/dashboard");
       }
     } catch (error) {
       alert(`Sign in failed ${(error as any)?.response?.data?.message}`);
       setLoading(false);
-      console.error("Sign up failed", error);
+      console.error("Sign in failed", error);
     } finally {
       setLoading(false);
     }
   };
+
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     nextRef:
@@ -69,7 +72,7 @@ const SignInModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
           <input
             type="email"
             placeholder="Email"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border text-black border-gray-300 rounded-md"
             required={true}
             ref={emailRef}
             onKeyDown={(e) => handleKeyDown(e, passwordRef)}
@@ -77,7 +80,7 @@ const SignInModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
           <input
             type="password"
             placeholder="Password"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border text-black border-gray-300 rounded-md"
             required={true}
             ref={passwordRef}
             onKeyDown={(e) => handleKeyDown(e, submitRef)}

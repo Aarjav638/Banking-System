@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useAxios } from "@/context/axiosContext";
 import { decryptAccountNumberDeterministic } from "@/helpers/Account/accountGenerate";
 
 interface FundTransferSavingsProps {
@@ -8,7 +8,7 @@ interface FundTransferSavingsProps {
   type: string;
 }
 
-const BankStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
+const BankStatement: React.FC<FundTransferSavingsProps> = ({ type }) => {
   const [isSmallScreen, setIsSmallScreen] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [account, setAccount] = useState<any>(null);
@@ -16,7 +16,7 @@ const BankStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
   const [currentaccountNumber, setCurrentAccountNumber] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [statement, setStatement] = useState<any>(null);
-
+  const { axiosInstance, token } = useAxios();
   // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1);
   const transactionsPerPage = 10;
@@ -25,11 +25,7 @@ const BankStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
     if (token) {
       const fetchAccount = async () => {
         try {
-          const response = await axios.get("/api/account/getdetails", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const response = await axiosInstance.get("/account/getdetails");
           setAccount(response.data);
         } catch (err) {
           console.error("Failed to fetch account details:", err);
@@ -38,9 +34,10 @@ const BankStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
       };
 
       fetchAccount();
+    } else {
+      setError("Token not found");
     }
-  }, [token]);
-
+  }, [token, axiosInstance]);
   useEffect(() => {
     if (account) {
       try {
@@ -51,7 +48,6 @@ const BankStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
           account[1].accountNumber
         );
         setCurrentAccountNumber(decryptedCurrentAccountNumber);
-
         setSavingsAccountNumber(decryptedSavingAccountNumber);
       } catch (error) {
         console.error("Failed to decrypt account number:", error);
@@ -61,10 +57,10 @@ const BankStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
   }, [account]);
 
   useEffect(() => {
-    if (type) {
+    if (type && (savingsaccountNumber || currentaccountNumber)) {
       getStatement();
     }
-  }, [type]);
+  }, [type, savingsaccountNumber, currentaccountNumber]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -86,21 +82,15 @@ const BankStatement: React.FC<FundTransferSavingsProps> = ({ token, type }) => {
   const getBankStatement = async (accountNumber: string) => {
     setLoading(true);
     try {
-      const response = await axios.post(
-        "/api/transactions/getstatement",
-        { accountnumber: accountNumber },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log(response);
-      setStatement(response.data);
+      const response = await axiosInstance.post("/transactions/getstatement", {
+        accountnumber: accountNumber,
+      });
+      setStatement(response.data.Transactions);
     } catch (error) {
-      setLoading(false);
       console.error("An error occurred during the fetching Statement:", error);
-      setError((error as any)?.response?.data?.error);
+      setError(
+        (error as any)?.response?.data?.error || "Failed to fetch statement."
+      );
     } finally {
       setLoading(false);
     }

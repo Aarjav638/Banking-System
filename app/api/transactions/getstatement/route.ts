@@ -49,10 +49,40 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ message: `Transactions not found for the entered account Account Number ` }, { status: 404});
     }
 
-    
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    // reduce transaction array to get the monthly spent amount by month and also get the month name
+    const monthlySpent = Transactions.reduce((acc, curr) => {
+      if (curr.transactionType === 'debit') {  // Filter by 'debit'
+        const monthIndex = curr.createdAt.getMonth();
+        const monthName = monthNames[monthIndex];
+        
+        if (!acc[monthName]) {
+          acc[monthName] = 0;
+        }
+        
+        acc[monthName] += curr.amount;
+      }
+      return acc;
+    }, {} as Record<string, number>);
 
-    // Return the account details
-    return NextResponse.json(Transactions, { status: 200 });
+    // Calculate Monthly Income (Credits)
+    const monthlyIncome = Transactions.reduce((acc, curr) => {
+      const monthIndex = curr.createdAt.getMonth();
+        const monthName = monthNames[monthIndex];
+      if (curr.transactionType === 'credit') {  // Filter by 'credit'
+        
+
+        if (!acc[monthName]) {
+          acc[monthName] = 0;
+        }
+        
+        acc[monthName] += curr.amount;
+      }
+      return acc;
+    }, {} as Record<string, number>);
+
+    // Return the transactions, monthly spent, and monthly income
+    return NextResponse.json({ Transactions, monthlySpent, monthlyIncome }, { status: 200 });
     
     
   } catch (error) {

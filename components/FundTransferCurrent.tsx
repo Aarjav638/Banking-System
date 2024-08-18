@@ -99,7 +99,7 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
             Sender Account:
           </label>
           <select
-            className="block w-full mb-3 p-2 border border-gray-300 rounded"
+            className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
             value={currentAccountNumber}
             disabled={!currentAccountNumber}
           >
@@ -120,7 +120,7 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
             placeholder="Recipient Account Number"
             minLength={10}
             maxLength={10}
-            className="block w-full mb-3 p-2 border border-gray-300 rounded"
+            className="block w-full mb-3 text-black p-2 border border-gray-300 rounded"
             required
             onInvalid={(e) => {
               if (e.currentTarget.value.length !== 10) {
@@ -136,7 +136,7 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
             Transfer Mode:
           </label>
           <select
-            className="block w-full mb-3 p-2 border border-gray-300 rounded"
+            className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
             value={mode}
             onChange={(e) => setMode(e.target.value)}
           >
@@ -151,7 +151,7 @@ const FundTransferCurrent: React.FC<FundTransferCurrentProps> = ({ token }) => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Amount"
-            className="block w-full mb-3 p-2 border border-gray-300 rounded"
+            className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
             required
           />
           <button

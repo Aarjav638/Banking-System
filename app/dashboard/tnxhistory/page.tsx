@@ -24,7 +24,7 @@ const Page = () => {
           Select Account Type:{" "}
         </label>
         <select
-          className=" p-2 rounded-lg "
+          className=" p-2 rounded-lg text-black"
           onChange={(e) => setType(e.target.value)}
           value={type ? type : ""}
         >

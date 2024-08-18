@@ -92,7 +92,7 @@ const Page = () => {
           Name:
         </label>
         <input
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
           type="text"
           id="name"
           name="name"
@@ -104,7 +104,7 @@ const Page = () => {
           Phone:
         </label>
         <input
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
           type="tel"
           id="phone"
           name="phone"
@@ -118,7 +118,7 @@ const Page = () => {
           Pan:
         </label>
         <input
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
           type="text"
           id="pan"
           name="pan"
@@ -130,7 +130,7 @@ const Page = () => {
           UID:
         </label>
         <input
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
           type="text"
           id="uid"
           name="uid"
@@ -142,7 +142,7 @@ const Page = () => {
           Father Name:
         </label>
         <input
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
           type="text"
           id="father_name"
           name="father_name"
@@ -154,7 +154,7 @@ const Page = () => {
           Address:
         </label>
         <input
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
           type="text"
           id="address"
           name="address"
@@ -166,7 +166,7 @@ const Page = () => {
           DOB:
         </label>
         <input
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 text-black border border-gray-300 rounded"
           type="date"
           id="dob"
           name="dob"
@@ -178,7 +178,7 @@ const Page = () => {
           Type:
         </label>
         <select
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 border text-black border-gray-300 rounded"
           id="type"
           name="type"
           required
@@ -193,7 +193,7 @@ const Page = () => {
           Opening Amount:
         </label>
         <input
-          className="block w-full mb-3 p-2 border border-gray-300 rounded"
+          className="block w-full mb-3 p-2 border text-black border-gray-300 rounded"
           type="number"
           id="amount"
           name="amount"

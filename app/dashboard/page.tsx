@@ -1,53 +1,128 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import CustomCard from "@/components/Dashboard/CustomCard";
-import UserProfileCard from "@/components/Dashboard/UserProfileCard";
+import { useAxios } from "@/context/axiosContext";
 import MiniStatement from "@/components/Dashboard/MiniStatement";
+import { useAccountType } from "@/context/account/typeContext";
+import BarChart from "@/components/Dashboard/AnalyticsCard";
+import { decryptAccountNumberDeterministic } from "@/helpers/Account/accountGenerate";
+import { useEffect, useState } from "react";
 export default function Dashboard() {
-  const [token, setToken] = useState<string | null>(null);
-  const [type, setType] = useState<string | null>(null);
-  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [account, setAccount] = useState<any>(null);
+  const [savingsaccountNumber, setSavingsAccountNumber] = useState<string>("");
+  const [currentaccountNumber, setCurrentAccountNumber] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [statement, setStatement] = useState<any>(null);
+  const [monthlyIncome, setMonthlyIncome] = useState<any>([]);
+  const [monthlySpent, setMonthlySpent] = useState<any>([]);
+  const { token, axiosInstance, isTokenReady } = useAxios();
+  const { accountType } = useAccountType();
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const fetchUserDetails = async () => {
+    try {
+      const response = await axiosInstance.get("account/getdetails");
+      setAccount(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch user details:", error);
+      setError("Failed to fetch user details.");
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("You need to login first");
-      router.push("/");
-      return;
+    if (isTokenReady && token) {
+      fetchUserDetails();
+    } else if (isTokenReady) {
+      setLoading(false);
+      setError("No token found. Please log in.");
     }
-    setToken(token);
-  }, [router]);
+  }, [isTokenReady, token]);
+  useEffect(() => {
+    if (account) {
+      try {
+        const decryptedSavingAccountNumber = decryptAccountNumberDeterministic(
+          account[0].accountNumber
+        );
+        const decryptedCurrentAccountNumber = decryptAccountNumberDeterministic(
+          account[1].accountNumber
+        );
+        setCurrentAccountNumber(decryptedCurrentAccountNumber);
+        setSavingsAccountNumber(decryptedSavingAccountNumber);
+      } catch (error) {
+        console.error("Failed to decrypt account number:", error);
+        setError("Failed to decrypt account number.");
+      }
+    }
+  }, [account]);
 
+  useEffect(() => {
+    if (accountType && (savingsaccountNumber || currentaccountNumber)) {
+      getStatement();
+    }
+  }, [accountType, savingsaccountNumber, currentaccountNumber]);
+
+  // Fetch the Analytics
+  const getAnalytics = async (accountNumber: string) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post("/transactions/getstatement", {
+        accountnumber: accountNumber,
+      });
+      console.log(response.data);
+      setStatement(response.data.Transactions);
+
+      setMonthlySpent(response.data.monthlySpent);
+      setMonthlyIncome(response.data.monthlyIncome);
+    } catch (error) {
+      console.error("An error occurred during the fetching Statement:", error);
+      setError(
+        (error as any)?.response?.data?.error || "Failed to fetch statement."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Get the statement
+  const getStatement = async () => {
+    if (accountType === "savings") {
+      await getAnalytics(savingsaccountNumber);
+    } else {
+      await getAnalytics(currentaccountNumber);
+    }
+  };
   return (
-    <div className="flex flex-col w-full h-full bg-slate-200 p-4 ">
+    <div className="flex flex-col w-full h-full bg-slate-200 ">
       <h1 className="my-4 text-2xl sm:text-4xl text-center">Dashboard</h1>
 
-      <div className="mt-10 h-screen bg-black flex flex-col overflow-auto p-2">
-        <div className="justify-center h-1/2 md:justify-between flex flex-col md:flex-row p-4 ">
-          <UserProfileCard type={type ? type : ""} token={token ? token : ""} />
-          <CustomCard />
+      <div className=" h-screen bg-black flex flex-col overflow-auto p-2 mx-1">
+        <div className="w-full  p-4 ">
+          <BarChart
+            monthlyIncome={monthlyIncome}
+            monthlySpent={monthlySpent}
+            months={months}
+          />
         </div>
-        <div className="h-1/2 w-full items-center flex flex-col gap-2 my-4 pb-4">
-          <form className="flex justify-center items-center flex-col sm:flex-row gap-2 ">
-            <label
-              htmlFor="accountType"
-              className="mr-4 sm:text-center text-white"
-            >
-              Select Account Type:{" "}
-            </label>
-            <select
-              className=" p-2 rounded-lg "
-              onChange={(e) => setType(e.target.value)}
-              value={type ? type : ""}
-            >
-              <option value="">Select Account Type</option>
-              <option value="savings">Savings</option>
-              <option value="current">Current</option>
-            </select>
-          </form>
+        <div className="w-full items-center flex flex-col gap-2 my-4 pb-4">
           <div className="mb-4">
-            <MiniStatement token={token ? token : ""} type={type ? type : ""} />
+            <MiniStatement
+              type={accountType}
+              statement={statement}
+              loading={loading}
+            />
           </div>
         </div>
       </div>

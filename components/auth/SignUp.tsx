@@ -1,8 +1,9 @@
 import React, { useRef, useState } from "react";
-import axios from "axios";
+import { useAxios } from "@/context/axiosContext"; // Adjust the import path
 import { user } from "@/constants/types";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+
 interface ModalProps {
   isOpen: boolean;
   handleClose: () => void;
@@ -11,11 +12,13 @@ interface ModalProps {
 const SignUpModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { axiosInstance, setToken } = useAxios(); // Use axios instance and setToken from the context
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user: user = {
@@ -26,9 +29,10 @@ const SignUpModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
     };
     try {
       setLoading(true);
-      const response = await axios.post("/api/auth/register", user);
+      const response = await axiosInstance.post("auth/register", user);
       if (response.status === 201) {
         alert("Sign up successful");
+        localStorage.setItem("user", JSON.stringify(response.data));
         window.location.reload();
       }
     } catch (error) {
@@ -37,6 +41,7 @@ const SignUpModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
       setLoading(false);
     }
   };
+
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     nextRef:
@@ -69,7 +74,7 @@ const SignUpModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
           <input
             type="text"
             placeholder="Name"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border text-black border-gray-300 rounded-md"
             required={true}
             ref={nameRef}
             onKeyDown={(e) => handleKeyDown(e, emailRef)}
@@ -77,7 +82,7 @@ const SignUpModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
           <input
             type="email"
             placeholder="Email"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border text-black border-gray-300 rounded-md"
             required={true}
             ref={emailRef}
             onKeyDown={(e) => handleKeyDown(e, passwordRef)}
@@ -85,7 +90,7 @@ const SignUpModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
           <input
             type="password"
             placeholder="Password"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border text-black border-gray-300 rounded-md"
             required={true}
             ref={passwordRef}
             onKeyDown={(e) => handleKeyDown(e, phoneRef)}
@@ -93,7 +98,7 @@ const SignUpModal: React.FC<ModalProps> = ({ isOpen, handleClose }) => {
           <input
             type="tel"
             placeholder="Phone"
-            className="p-2 border border-gray-300 rounded-md"
+            className="p-2 border text-black border-gray-300 rounded-md"
             required={true}
             ref={phoneRef}
             minLength={10}

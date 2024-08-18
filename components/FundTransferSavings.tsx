@@ -121,7 +121,7 @@ const FundTransferSavings: React.FC<FundTransferSavingsProps> = ({ token }) => {
         placeholder="Recipient Account Number"
         minLength={10}
         maxLength={10}
-        className="block w-full mb-3 p-2 border border-gray-300 rounded"
+        className="block w-full mb-3 p-2 border text-black border-gray-300 rounded"
         required
         onInvalid={(e) => {
           if (e.currentTarget.value.length !== 10) {
@@ -135,7 +135,7 @@ const FundTransferSavings: React.FC<FundTransferSavingsProps> = ({ token }) => {
       />
       <label className="block text-sm font-medium mb-2">Transfer Mode:</label>
       <select
-        className="block w-full mb-3 p-2 border border-gray-300 rounded"
+        className="block w-full mb-3 p-2 border text-black border-gray-300 rounded"
         value={mode}
         onChange={(e) => setMode(e.target.value)}
       >
@@ -150,7 +150,7 @@ const FundTransferSavings: React.FC<FundTransferSavingsProps> = ({ token }) => {
         value={amount}
         onChange={(e) => setAmount(Number(e.target.value))}
         placeholder="Amount"
-        className="block w-full mb-3 p-2 border border-gray-300 rounded"
+        className="block w-full mb-3 p-2 border text-black border-gray-300 rounded"
         required
       />
       <button
