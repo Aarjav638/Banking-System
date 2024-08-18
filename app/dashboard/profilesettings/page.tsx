@@ -19,11 +19,12 @@ const ProfileSettings: React.FC = () => {
     }
 
     const storedUser = localStorage.getItem("user");
+    console.log(storedUser);
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setUser({
-        id: parsedUser.userWithoutPassword.id,
-        name: parsedUser.userWithoutPassword.name,
+        id: parsedUser.id,
+        name: parsedUser.name,
       });
     } else {
       alert("Something went wrong. User not found.");
