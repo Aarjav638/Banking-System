@@ -31,12 +31,31 @@ export const AxiosProvider = ({ children }: { children: ReactNode }) => {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setToken(token);
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      setToken(storedToken);
     }
     setIsTokenReady(true);
-  }, [axiosInstance]);
+  }, []);
+
+  useEffect(() => {
+    const interceptor = axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          alert("Session has expired. Please log in again.");
+          localStorage.removeItem("token");
+          setToken(null);
+          router.push("/");
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axiosInstance.interceptors.response.eject(interceptor);
+    };
+  }, [token, router]);
 
   return (
     <AxiosContext.Provider
